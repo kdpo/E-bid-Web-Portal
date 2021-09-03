@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>E-Bid Form</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel = "icon" href = "{{ url_for('.static', filename='css/img/DOST-ASTI-Logo-RGB.png') }}" type = "image/x-icon">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='css/style.css') }}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+	<script src="{{ url_for('.static', filename='js/index.js') }}"></script> 
+	<script src="{{ url_for('.static', filename='js/openpgp.min.js') }}"></script> 
+	<script src="{{ url_for('.static', filename='js/FileSaver.js') }}"></script> 
+	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js" integrity="sha512-uVSVjE7zYsGz4ag0HEzfugJ78oHCI1KhdkivjQro8ABL/PRiEO4ROwvrolYAcZnky0Fl/baWKYilQfWvESliRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip-utils/0.1.0/jszip-utils.min.js" integrity="sha512-3WaCYjK/lQuL0dVIRt1thLXr84Z/4Yppka6u40yEJT1QulYm9pCxguF6r8V84ndP5K03koI9hV1+zo/bUbgMtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/3.2.0/sha.js" integrity="sha512-mvfoZwdzM8yPhlNxN1lU8S5wcfC5aPRCD3W0jsOeA+D75MMCrycxQqIvt6K7c5P7jItn7AXiAreuR+eockUHwQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+	<div id="overlay">
+		<div id="center">
+			<div class="sk-fading-circle">
+			  <div class="sk-circle1 sk-circle"></div>
+			  <div class="sk-circle2 sk-circle"></div>
+			  <div class="sk-circle3 sk-circle"></div>
+			  <div class="sk-circle4 sk-circle"></div>
+			  <div class="sk-circle5 sk-circle"></div>
+			  <div class="sk-circle6 sk-circle"></div>
+			  <div class="sk-circle7 sk-circle"></div>
+			  <div class="sk-circle8 sk-circle"></div>
+			  <div class="sk-circle9 sk-circle"></div>
+			  <div class="sk-circle10 sk-circle"></div>
+			  <div class="sk-circle11 sk-circle"></div>
+			  <div class="sk-circle12 sk-circle"></div>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="form-div flex-container animate__animated animate__fadeInDownBig">
+			<div class="flex-item-right">
+				<img src="{{ url_for('.static', filename='css/img/icon.png') }}" class="img-fluid mx-auto d-block logo" id="icon">
+			</div>
+			<div class="flex-item-left">
+				<img src="{{ url_for('.static', filename='css/img/DOSTI-ASTI-NEW-LOGO.png') }}" class="img-fluid mx-auto d-block logo" width="850" height="auto">
+				<!--<div id="terms">
+					
+					<h2>TERMS AND CONDITIONS</h2>
+					<div id="terms-content">				
+
+						Please read these terms and conditions carefully before proceeding to the form operated by DOST-ASTI. 
+						<br><br>
+						<h5><strong>Conditions of use </strong></h5>
+						By using this website, you certify that you have read and reviewed this Agreement and that you 
+						agree to comply with its terms. If you do not want to be bound by the terms of this Agreement, 
+						you  are  advised  to  leave  the  website  accordingly.  [name]  only  grants  use  and  access  of  this 
+						website, its products, and its services to those who have accepted its terms. 
+						<br><br>
+						<h5><strong>Privacy policy</strong></h5>
+						Before you continue using our website, we advise you to read our privacy policy [link to privacy 
+						policy] regarding our user data collection. It will help you better understand our practices. 
+						<br><br>
+						<h5><strong>Age restriction</strong></h5>
+						You  must be at  least  18  (eighteen)  years  of  age before  you  can  use this  website.  By  using this 
+						website,  you  warrant  that  you  are  at  least  18  years  of  age  and  you  may  legally  adhere  to  this Agreement. [name] assumes no responsibility for liabilities related to age misrepresentation. 
+						<br><br>
+						<h5><strong>Intellectual property </strong></h5>
+						You agree that all materials, products, and services provided on this website are the property of 
+						[name],  its  affiliates,  directors,  officers,  employees,  agents,  suppliers,  or  licensors  including  all 
+						copyrights,  trade  secrets,  trademarks,  patents,  and  other  intellectual  property.  You  also  agree 
+						that  you  will  not  reproduce  or  redistribute  the  [name]’s  intellectual  property  in  any  way, 
+						including electronic, digital, or new trademark registrations. 
+						You  grant  [name]  a  royalty-free  and  non-exclusive  license  to  display,  use,  copy,  transmit,  and 
+						broadcast the content you upload and publish. For issues regarding intellectual property claims, 
+						you should contact the company in order to come to an agreement. 
+						<br><br>
+						<h5><strong>User accounts</strong></h5>
+						As a user of this website, you may be asked to register with us and provide private information. 
+						You  are  responsible  for  ensuring  the  accuracy  of  this  information,  and  you  are  responsible  for 
+						maintaining the safety and security of your identifying information. You are also responsible for 
+						all activities that occur under your account or password. 
+						If you think there are any possible issues regarding the security of your account on the website, 
+						inform us immediately so we may address them accordingly. 
+						We reserve all rights to terminate accounts, edit or remove content and cancel orders at our sole 
+						discretion. 
+						
+						 <br><br>
+						<h5><strong>Applicable law </strong></h5>
+						By visiting this website, you agree that the laws of the [location], without regard to principles of 
+						conflict laws, will govern these terms and conditions, or any dispute of any sort that might come 
+						between [name] and you, or its business partners and associates. 
+						Disputes 
+						Any dispute related in any way to your visit to this website or to products you purchase from us 
+						shall  be arbitrated  by  state or  federal  court  [location]  and you consent  to  exclusive jurisdiction 
+						and venue of such courts. 
+						Indemnification 
+						You  agree  to  indemnify [name] and  its  affiliates and  hold  [name]  harmless  against  legal claims 
+						and  demands  that  may  arise  from  your  use  or  misuse  of  our  services.  We  reserve  the  right  to 
+						select our own legal counsel.  
+						<br><br>
+						<h5><strong>Limitation on liability</strong></h5>
+						[name]  is  not  liable  for  any  damages  that  may  occur  to  you  as  a  result  of  your  misuse  of  our 
+						website. 
+						[name]  reserves  the  right to  edit,  modify, and change this Agreement  at any  time.  We shall  let 
+						our  users know  of  these  changes  through  electronic  mail. This Agreement  is an  understanding 
+						between [name] and the user, and this supersedes and replaces all prior agreements regarding 
+						the use of this website.
+					</div>
+					
+					<br>
+					<div class="form-check">
+					  
+					</div>
+					<br>
+					<button type="button" class="btn btn-primary button-block" id="btn-continue"> CONTINUE </button>
+				</div>-->
+
+				<div id='e-bid-form' class="animate__animated animate__fadeIn">		
+				<h2> E-BID FORM </h2>
+				<form class="needs-validation" action="/process" method="post" enctype="multipart/form-data" id="formdata">
+					<div class="mb-3 row position-relative">
+						<label for="email" class="col-sm-3 col-form-label">Email</label>
+						<div class="col-sm-9">
+							<input type="email" class="form-control" id="email" placeholder="juandelacruz@gmail.com" required> 
+						</div>
+					</div>
+					<div class="mb-3 row">
+						<label for="password" class="col-sm-3 col-form-label">Password</label>
+						<div class="col-sm-9">
+							<input type="password" class="form-control" id="password" placeholder="Password" required>
+						</div>
+					</div>
+					<div class="mb-3 row">
+						<label for="bid_id" class="col-sm-3 col-form-label">Bid ID</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id="bid_id" placeholder="12345" required>
+						</div>
+					</div>
+					<br>
+					<div class="mb-4">
+						<label for="formFile" class="form-label">Bid Document in PDF</label>
+						<input class="form-control" type="file" id="formFile" accept="application/pdf" required>
+					</div>
+					<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+					  <label class="form-check-label" for="flexCheckDefault">
+					    I agree to DOST-ASTI's Terms and Conditions.
+					  </label>
+					  <br><br>
+					<div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
+					<button type="button" class="btn btn-primary button-block" id="btn-submit" disabled> SUBMIT </button>
+
+				</form>
+				
+				<!--<footer><small> &copy; 2021 DOST-ASTI Research and Development Division. </small></footer>-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="{{ url_for('.static', filename='js/zip.js/zip.min.js') }}"></script>
+	<script src="{{ url_for('.static', filename='js/zip.js/zip.js') }}"></script>
+</body>
+</html>

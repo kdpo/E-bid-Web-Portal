@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Decrypt</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('.static', filename='css/decrypt.css') }}">	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script src="{{ url_for('.static', filename='js/openpgp.min2.js') }}"></script> 
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js" integrity="sha512-uVSVjE7zYsGz4ag0HEzfugJ78oHCI1KhdkivjQro8ABL/PRiEO4ROwvrolYAcZnky0Fl/baWKYilQfWvESliRA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body class="bg-dark">
+	<div id="overlay">
+		<div id="center">
+			<div class="sk-fading-circle">
+			  <div class="sk-circle1 sk-circle"></div>
+			  <div class="sk-circle2 sk-circle"></div>
+			  <div class="sk-circle3 sk-circle"></div>
+			  <div class="sk-circle4 sk-circle"></div>
+			  <div class="sk-circle5 sk-circle"></div>
+			  <div class="sk-circle6 sk-circle"></div>
+			  <div class="sk-circle7 sk-circle"></div>
+			  <div class="sk-circle8 sk-circle"></div>
+			  <div class="sk-circle9 sk-circle"></div>
+			  <div class="sk-circle10 sk-circle"></div>
+			  <div class="sk-circle11 sk-circle"></div>
+			  <div class="sk-circle12 sk-circle"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="form-wrapper" class="bg-light align-middle">
+		<center><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTExLjk2MiA1MTEuOTYyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTEuOTYyIDUxMS45NjI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8Zz4NCgkJCTxwYXRoIGQ9Ik01MDYuNzIyLDEzMi4yMDhsLTU2LjMyLTU0LjM1N2wyMy40NjctMjQuMzJjOS4xMDQtOS4xMzEsMTAuMzYyLTIzLjQ3MSwyLjk4Ny0zNC4wNDgNCgkJCQljLTQuNTA2LTYuMTQ0LTExLjQ5NS05Ljk4NS0xOS4wOTctMTAuNDk1Yy03LjYwMi0wLjUxLTE1LjA0MSwyLjM2My0yMC4zMjcsNy44NDlMMjIwLjQyOSwyNDEuNTJsMTIuMjAzLDExLjg2MWwxMi43MTUsMTIuMjg4DQoJCQkJbDEyLjI4OCwxMS44NjFsOTYuNTk3LTEwMC4wMTFsNTYuMjM1LDU0LjI3MmMzLjI2OSwzLjE5Myw3LjY4LDQuOTQ1LDEyLjI0OSw0Ljg2NXM4LjkxNi0xLjk4NiwxMi4wNzEtNS4yOTFsMTIuMDMyLTEyLjQ1OQ0KCQkJCWMzLjE4LTMuMjc2LDQuOTIzLTcuNjg0LDQuODQzLTEyLjI0OXMtMS45NzctOC45MDktNS4yNy0xMi4wNzFsLTYuMzE1LTYuMTQ0bDI0LjMyLTI1LjE3M2w2LjMxNSw2LjE0NA0KCQkJCWMzLjI5NSwzLjE2OCw3LjcxOSw0Ljg4OCwxMi4yODgsNC43NzljNC41NTgsMC4wMDYsOC45MTUtMS44NzksMTIuMDMyLTUuMjA1bDEyLjExNy0xMi40NTkNCgkJCQlDNTEzLjczLDE0OS42ODgsNTEzLjUzOSwxMzguODEzLDUwNi43MjIsMTMyLjIwOHogTTQ0NS4zNjcsMTMzLjA2MWwtMzYuMTgxLDM3LjQ2MWMtMS41NTMsMS42NDEtMy43MTQsMi41NjctNS45NzMsMi41NmgtMC4xNzENCgkJCQljLTIuMjAxLDAuMDEzLTQuMzE4LTAuODQ2LTUuODg4LTIuMzg5bC0yNS4wMDMtMjQuMDY0Yy0zLjM3NS0zLjMwNy0zLjQ1MS04LjcxNy0wLjE3MS0xMi4xMTdsMzYuMTgxLTM3LjQ2MQ0KCQkJCWMxLjU1My0xLjY0MSwzLjcxNC0yLjU2Nyw1Ljk3My0yLjU2YzIuMjU5LTAuMDU0LDQuNDQ1LDAuODA3LDYuMDU5LDIuMzg5bDI0LjkxNywyNC4wNjQNCgkJCQlDNDQ4LjUxLDEyNC4yMjcsNDQ4LjYyNCwxMjkuNjM3LDQ0NS4zNjcsMTMzLjA2MXoiLz4NCgkJCTxwYXRoIGQ9Ik0yMjEuNjIzLDMxNC43MzZsLTEyLjI4OC0xMS44NjFsLTEyLjYyOS0xMi4yMDNsLTEyLjI4OC0xMS44NjFsLTE0LjMzNiwxNC44NDgNCgkJCQljLTUwLjU1NC0zMC4wMy0xMTUuNzAzLTE2LjA5Ny0xNDkuNTUzLDMxLjk4M0MtMTMuMzIsMzczLjcyMi00LjQ2Niw0MzkuNzU0LDQwLjg1Myw0NzcuMjINCgkJCQljNDUuMzE5LDM3LjQ2NiwxMTEuODM4LDMzLjc0NCwxNTIuNjk1LTguNTQyYzM2LjQ1NS0zNy40ODgsNDIuMTU1LTk1LjE5OCwxMy43MzktMTM5LjA5NEwyMjEuNjIzLDMxNC43MzZ6IE0xNjguNjMxLDQ0NC42MTMNCgkJCQljLTE0LjMzMSwxNC44OTktMzQuMDI4LDIzLjQ0Mi01NC42OTksMjMuNzIzaC0xLjQ1MWMtMzYuOTY0LTAuMTA2LTY4Ljc0OS0yNi4yMTEtNzYuMDM2LTYyLjQ1DQoJCQkJYy03LjI4Ny0zNi4yMzksMTEuOTM2LTcyLjYwMSw0NS45ODYtODYuOTg3czczLjUyMi0yLjgyMiw5NC40MjUsMjcuNjY0QzE5Ny43NjEsMzc3LjA1LDE5NC4zMjIsNDE4LjAzNiwxNjguNjMxLDQ0NC42MTN6DQoJCQkJIE0xNzcuMzM1LDMxMC42NGMwLDAuMDIzLTAuMDA4LDAuMDQ1LTAuMDI0LDAuMDYxYzAsMCwwLDAsMCwwQzE3Ny4zMjcsMzEwLjY4NSwxNzcuMzM2LDMxMC42NjMsMTc3LjMzNSwzMTAuNjR6DQoJCQkJIE0xNzYuNTY3LDMxMS4zMjNjMC4yNjUtMC4xNTIsMC40OTctMC4zNTUsMC42ODMtMC41OTdjMC4wMTQsMCwwLjAyNS0wLjAwOSwwLjAzNy0wLjAxNWMtMC4wMTIsMC4wMDYtMC4wMjMsMC4wMTUtMC4wMzcsMC4wMTUNCgkJCQlDMTc3LjA2NSwzMTAuOTY4LDE3Ni44MzMsMzExLjE3MSwxNzYuNTY3LDMxMS4zMjNsLTAuMDg1LDAuMDg1Yy0wLjM5NSwwLjMwNS0wLjgyNSwwLjU2My0xLjI4LDAuNzY4DQoJCQkJYy0xLjI1NCwwLjY3LTIuNjU2LDAuOTkxLTQuMDYxLDAuOTQxYzEuNDA1LDAuMDQ5LDIuODA2LTAuMjcxLDQuMDYxLTAuOTQxYzAuNDU1LTAuMjA1LDAuODg1LTAuNDYzLDEuMjgtMC43NjhsMCwwDQoJCQkJTDE3Ni41NjcsMzExLjMyM3ogTTM4Ljc0LDMzMC4yOTVjMzEuMjcyLTM4LjQ3LDg2LjgwMi00Ni41NjgsMTI3Ljc1OC0xOC42MzFjMC41MTksMC4zNjUsMS4wOSwwLjY1LDEuNjkzLDAuODQ4DQoJCQkJYzAuMDAzLDAuMDAxLDAuMDA2LDAuMDAzLDAuMDEsMC4wMDRjLTAuNjA3LTAuMTk4LTEuMTgxLTAuNDg0LTEuNzAyLTAuODUyQzEyNS41NDIsMjgzLjcyNyw3MC4wMTIsMjkxLjgyNSwzOC43NCwzMzAuMjk1DQoJCQkJYy0xNC42NTksMTguMDMzLTIxLjY5NSwzOS45MjEtMjEuMzU3LDYxLjYyOUMxNy4wNDQsMzcwLjIxNiwyNC4wODEsMzQ4LjMyOCwzOC43NCwzMzAuMjk1eiBNMjA4LjEyLDM5MS45NzINCgkJCQljMC4zMzEtMjAuMjczLTUuNzc1LTQwLjc2NC0xOC42NjctNTguMjA2YzAuMDAyLDAuMDAzLDAuMDA0LDAuMDA1LDAuMDA1LDAuMDA3QzIwMi4zNDcsMzUxLjIxNCwyMDguNDUsMzcxLjcwMiwyMDguMTIsMzkxLjk3MnoiDQoJCQkJLz4NCgkJCTxwYXRoIGQ9Ik0yMzkuNjI5LDI4My44NDVsLTI0LjQ5MS0yMy42MzdsLTAuODUzLTAuODUzbC0xMi4yODgtMTEuODYxYy0xLjYwNS0xLjU5NS0zLjc5Ny0yLjQ1OS02LjA1OS0yLjM4OQ0KCQkJCWMtMi4yODIsMC4wOC00LjQ0OSwxLjAyNS02LjA1OSwyLjY0NWMtMS43ODgsMS42NzctMi43OCw0LjAzNC0yLjczMSw2LjQ4NWMwLjAyNiwyLjI1MiwwLjk0Nyw0LjQwMSwyLjU2LDUuOTczbDEyLjM3MywxMS45NDcNCgkJCQlsMC41OTcsMC41MTJsMjQuNjYxLDIzLjg5M2wxMi43MTUsMTIuMjAzYzEuNjE3LDEuNTc2LDMuNzk0LDIuNDQzLDYuMDUxLDIuNDExYzIuMjU3LTAuMDMyLDQuNDA5LTAuOTYxLDUuOTgxLTIuNTgyDQoJCQkJYzEuODA5LTEuNjcsMi44MzEtNC4wMjQsMi44MTYtNi40ODVjMC4wMDctMi4yNTktMC45MTktNC40MjEtMi41Ni01Ljk3M0wyMzkuNjI5LDI4My44NDV6Ii8+DQoJCTwvZz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==" width='120' />
+		</center>
+		<br>
+		<form class="needs-validation">
+			<h4><strong>File to decrypt</strong></h4>
+			<input class="form-control" type="file" id="file" accept="application/zip" required/>
+			<br>
+			<h4><strong>Archive Password</strong></h4>
+			<input class="form-control" type="password" id="password" required/>
+			<br>
+			<div id="private-key">
+				<h4><strong>Private Key</strong></h4>
+				<input class="form-control" type="file" id="pkey" accept="application/asc" required/>
+
+				<br>
+				<h4><strong>Passphrase</strong></h4>
+				<textarea class="form-control" rows="2" id="passphrase" required></textarea>
+			</div>
+		</form>
+		<br>
+		<div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
+		<div id="successAlert" class="alert alert-success" role="alert" style="display: none;"></div>
+		<center>
+			<button class="btn btn-secondary" id="decrypt">Decrypt</button>
+			<button class="btn btn-success" id="download-button" disabled><a id="download">Download PDF</a></button>
+		</center>
+	</div>
+</body>
+<script src="{{ url_for('.static', filename='js/decrypt.js') }}"></script> 
+<script src="{{ url_for('.static', filename='js/zip.js/zip.min.js') }}"></script>
+<script src="{{ url_for('.static', filename='js/zip.js/zip.js') }}"></script>
+</html>
